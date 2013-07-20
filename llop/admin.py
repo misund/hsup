@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hsup.models import *
+from llop.models import *
 
 class FeedAdmin(admin.ModelAdmin):
     pass

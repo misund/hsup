@@ -1,4 +1,4 @@
-# Django settings for hsup project.
+# Django settings for llop project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -101,10 +101,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'hsup.urls'
+ROOT_URLCONF = 'llop.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'hsup.wsgi.application'
+WSGI_APPLICATION = 'llop.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -121,7 +121,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    'hsup',
+    'llop',
 )
 
 # A sample logging configuration. The only tangible logging

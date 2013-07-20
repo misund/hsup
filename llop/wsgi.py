@@ -1,5 +1,5 @@
 """
-WSGI config for hsup project.
+WSGI config for llop project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -15,7 +15,7 @@ framework.
 """
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hsup.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "llop.settings")
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION

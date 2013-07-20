@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from hsup.models import Feed
+from llop.models import Feed
 
 def push_it_baby(self, entry):
     push_to_twitter(entry);

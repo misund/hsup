@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
-from hsup.views import *
-from hsup.models import *
+from llop.views import *
+from llop.models import *
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -9,8 +9,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'hsup.views.home', name='home'),
-    # url(r'^hsup/', include('hsup.foo.urls')),
+    url(r'^$', 'llop.views.home', name='home'),
+    # url(r'^llop/', include('llop.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
