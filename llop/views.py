@@ -3,18 +3,18 @@ from llop.models import Feed
 
 def push_it_baby(self, entry):
     push_to_twitter(entry);
-    return entry.tostring()
+    return str(entry)
 
 def home(request):
     response = ""
 
     for feed in Feed.objects.all():
-	try:
-            response = response.join( feed.update(push_it_baby) )
-	except TypeError:
-	    response = response.join( TypeError.tostring() )
+        try:
+            response += str(feed.update(push_it_baby))
+        except TypeError as error:
+            response += str(error)
 
-    response = response.join( "Oppdaterte alle feeds." )
+    response += "Oppdaterte alle feeds."
 
     return HttpResponse( response )
 
