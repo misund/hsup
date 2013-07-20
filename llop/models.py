@@ -7,7 +7,7 @@ import feedparser
 import logging
 
 class Feed(models.Model):
-    url = models.CharField(max_length=255)
+    url = models.URLField(max_length=255)
     last_updated = models.DateTimeField(blank=True, null=True)
     last_pubdate = models.DateTimeField(blank=True, null=True)
     update_interval = models.IntegerField(default=3600)
@@ -30,3 +30,8 @@ class Feed(models.Model):
         
         self.last_updated = datetime.now()
         self.save()
+
+# What to do when there are new entries
+class Callback(models.Model):
+    url = models.URLField(max_length=255)
+    feed = models.ForeignKey('Feed')
