@@ -10,6 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'llop.views.home', name='home'),
+    url(r'^post/$', 'llop.views.post', name='post'),
     # url(r'^llop/', include('llop.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
