@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
@@ -10,6 +12,7 @@ import dateutil.parser
 import feedparser
 import json
 import logging
+import urllib
 import urllib2
 
 def _get_callbacks(feed):
@@ -37,7 +40,7 @@ def _update_feed(feed):
 
     parsed_feed = feedparser.parse(feed.url)
 
-    if parsed_feed['status'] != 200:
+    if parsed_feed.get('status') != 200:
         logging.warning("Feed '{url}' errored with message '{msg}'".format(url=feed.url, msg=str(parsed_feed['bozo_exception']).strip()))
 
     for entry in parsed_feed['entries']:
@@ -46,7 +49,11 @@ def _update_feed(feed):
             logging.info('Update added new post: '+entry['guid'])
             feed.last_pubdate = timezone.make_aware(published, timezone.get_default_timezone())
             for callback in _get_callbacks(feed):
-                urllib2.urlopen(callback.url, str(entry))
+                try:
+                    entry = str(entry).encode("utf-8")
+                    urllib2.urlopen(callback.url, data=urllib.quote(entry))
+                except Exception as err:
+                    logging.error("ERROR: " +str(err))
 
     feed.last_updated = timezone.make_aware(datetime.now(), timezone.get_default_timezone())
     feed.save()
@@ -61,6 +68,15 @@ def _url_validate_online(url):
             raise ValidationError("url '{url}' doesn't respond.".format(url=url))
     except urllib2.URLError:
         raise ValidationError("url '{url}' does not exist.".format(url=url))
+
+def _url_validate_feed(url):
+    parsed_feed = feedparser.parse(url)
+
+    if parsed_feed.get('status') != 200:
+        raise ValidationError("Parsing '{url}' errored with message '{msg}'".format(url=url, msg=str(parsed_feed['bozo_exception']).strip()))
+
+    if len(parsed_feed.entries) == 0:
+        raise ValidationError("Feed '{url}' looks empty.".format(url=url))
 
 def home(request):
     response = ""
@@ -77,7 +93,6 @@ def home(request):
 
 @csrf_exempt
 def post(request):
-    print request.POST
     return HttpResponse("Success!")
 
 @csrf_exempt
@@ -93,6 +108,7 @@ def add_feed(request):
         callback_url = data['callback_url']
 
         _url_validate_online(feed_url)
+        _url_validate_feed(feed_url)
         url_validate(callback_url)
 
         if _is_callback_duplicate(callback_url, feed_url):
