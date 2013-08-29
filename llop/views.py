@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -49,6 +51,16 @@ def _update_feed(feed):
     feed.last_updated = timezone.make_aware(datetime.now(), timezone.get_default_timezone())
     feed.save()
 
+def _url_validate_online(url):
+    validate = URLValidator()
+    validate(url)
+
+    try:
+        response = urllib2.urlopen(url)
+        if response.getcode() != 200:
+            raise ValidationError("url '{url}' doesn't respond.".format(url=url))
+    except urllib2.URLError:
+        raise ValidationError("url '{url}' does not exist.".format(url=url))
 
 def home(request):
     response = ""
@@ -73,10 +85,15 @@ def add_feed(request):
     if request.method.lower() != "post":
         return HttpResponse("Wrong method: " +str(request.method)) #TODO return 404
         
+    url_validate = URLValidator()
+
     try:
         data = json.loads(request.body)
         feed_url = data['feed_url']
         callback_url = data['callback_url']
+
+        _url_validate_online(feed_url)
+        url_validate(callback_url)
 
         if _is_callback_duplicate(callback_url, feed_url):
             return HttpResponse("Already exists.") # TODO Return correct statuscode.
@@ -90,4 +107,6 @@ def add_feed(request):
         return HttpResponse("Added connection: {feed} -> {cb}".format(feed=feed_url, cb=callback_url))
     except (ValueError, KeyError) as err:
         return HttpResponse("No data in body or invalid JSON. Error: " +str(err)) #TODO return correct statuscode
+    except ValidationError as err:
+        return HttpResponse("Url validation error: "+str(err)) # TODO: Return something better
 
