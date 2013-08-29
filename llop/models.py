@@ -10,6 +10,9 @@ class Feed(models.Model):
     last_pubdate = models.DateTimeField(blank=True, null=True)
     update_interval = models.IntegerField(default=3600)
 
+    def __unicode__(self):
+        return str(self.url)
+
     def update(self, callback):
         logging.info("Update started.")
         old_limit = timezone.make_aware( datetime.now(), timezone.get_default_timezone() ) - timedelta( seconds = self.update_interval )
@@ -33,3 +36,6 @@ class Feed(models.Model):
 class Callback(models.Model):
     url = models.URLField(max_length=255)
     feed = models.ForeignKey('Feed')
+
+    def __unicode__(self):
+        return "{feed} -> {callback}".format(callback=str(self.url), feed=str(self.feed))
