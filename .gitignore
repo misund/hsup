@@ -4,3 +4,4 @@
 llop/settings.py
 hsup/settings.py
 sqlite.db
+venv/
