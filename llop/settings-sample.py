@@ -20,6 +20,9 @@ DATABASES = {
     }
 }
 
+# Don't be so strict with slashes, m'kay? At least don't make any noise about it.
+APPEND_SLASH=False
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
