@@ -8,8 +8,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'llop.views.home', name='home'),
-    url(r'^post/$', 'llop.views.post', name='post'),
+    url(r'^update/$', 'llop.views.update', name='update'),
     url(r'^add_feed/$', 'llop.views.add_feed', name='add_feed'),
 
     # Uncomment the admin/doc line below to enable admin documentation:

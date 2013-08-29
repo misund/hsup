@@ -79,7 +79,7 @@ def _url_validate_feed(url):
     if len(parsed_feed.entries) == 0:
         raise ValidationError("Feed '{url}' looks empty.".format(url=url))
 
-def home(request):
+def update(request):
     response = ""
 
     for feed in Feed.objects.all():
@@ -91,10 +91,6 @@ def home(request):
     response += "Oppdaterte alle feeds."
 
     return HttpResponse( response )
-
-@csrf_exempt
-def post(request):
-    return HttpResponse("Success!")
 
 @csrf_exempt
 def add_feed(request):
