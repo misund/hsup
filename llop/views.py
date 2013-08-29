@@ -11,6 +11,7 @@ from llop.models import Feed, Callback
 import dateutil.parser
 import feedparser
 import json
+import jsonpickle
 import logging
 import urllib
 import urllib2
@@ -50,8 +51,8 @@ def _update_feed(feed):
             feed.last_pubdate = timezone.make_aware(published, timezone.get_default_timezone())
             for callback in _get_callbacks(feed):
                 try:
-                    entry = str(entry).encode("utf-8")
-                    urllib2.urlopen(callback.url, data=urllib.quote(entry))
+                    entry = jsonpickle.encode(entry, unpicklable=False)
+                    urllib2.urlopen(callback.url, data=entry)
                 except Exception as err:
                     logging.error("ERROR: " +str(err))
 
